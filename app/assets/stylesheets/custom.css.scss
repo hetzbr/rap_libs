@@ -1,6 +1,8 @@
 @import "bootstrap-sprockets";
 @import "bootstrap";
 
+
+
 /* mixins, variables, etc. */
 
 $gray-medium-light: #eaeaea;
@@ -11,8 +13,23 @@ html {
   overflow-y: scroll;
 }
 
+a:link { 
+  color: #FBCE33;
+}
+a:visited { 
+  color: #FBCE33;
+}
+a:hover { 
+  color: #fff;
+}
+a:active { 
+  color: #FBCE33;
+}
+
 body {
   padding-top: 60px;
+  text-color:#fff;
+  color:#fff;
 }
 
 section {
@@ -41,17 +58,29 @@ h1 {
   letter-spacing: -2px;
   margin-bottom: 30px;
   text-align: center;
-  color: #003366;
+  color: #fff;
 }
 
 h2 {
-  font-size: 1.2em;
+  font-size: 2em;
   letter-spacing: -1px;
   margin-bottom: 30px;
-  text-align: center;
+  text-align: left;
   font-weight: normal;
-  color: #003366;
+  color: #fff;
+
 }
+
+h3 {
+  font-size: 1.5em;
+  letter-spacing: -1px;
+  margin-bottom: 30px;
+  text-align: left;
+  font-weight: normal;
+  color: #fff;
+  padding-left:20px;
+}
+
 
 p {
   font-size: 1.1em;
@@ -82,12 +111,7 @@ footer {
   margin-top: 45px;
   padding-top: 5px;
   border-top: 1px solid $gray-medium-light;
-  color: $gray-light;
-  a {
-    color: $gray;
-    &:hover {
-      color: $gray-darker;
-    }
+  
   }
   small {
     float: left;
@@ -100,4 +124,4 @@ footer {
       margin-left: 15px;
     }
   }
-}
+
