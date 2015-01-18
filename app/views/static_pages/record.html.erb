@@ -7,7 +7,7 @@
 
  <div style="margin: auto;">
   <button id="record">Start</button>
-  <div id='line'></div>
+  <div id='line'>|</div>
   <div id='wordtype'></div>
   <div id='syllables'></div>
  
@@ -17,19 +17,23 @@
 
   <script>
   var blanks;
-  var index = 0;
+  var index = -1;
   var interval;
   function __log(e, data) {
     log.innerHTML += "\n" + e + " " + (data || '');
   }
   function newClip() {
     index += 1;
-    var line = document.getElementById('line');
-    line.innerHTML = "test";//"<hr size='" + blanks[index]./**/ + "'>";
-    var wordtype = document.getElementById('wordtype');
-    wordtype.innerHTML = "test";//blanks[index]./**/ ;
-    var syllables = document.getElementById('syllables');
-    syllables.innerHTML = "test";//blanks[index]./**/ + " syllables";
+    try {
+      var line = document.getElementById('line');
+      line.width = blanks[index].length;
+      var wordtype = document.getElementById('wordtype');
+      wordtype.innerHTML = blanks[index].wordtype ;
+      var syllables = document.getElementById('syllables');
+      syllables.innerHTML = blanks[index].syllabuls + " syllables";
+    } catch (e) {
+      console.log(urls);
+    }
   }
   var audio_context;
   var recorder;
@@ -49,7 +53,7 @@
     button.onclick = function() { stopRecording(this); }
     button.innerHTML = "Stop";
     __log('Recording...');
-    var length = 1000;//blanks[index]./**/;
+    var length = blanks[index].length;
     interval = setInterval(function(){stopRecording(document.getElementById("record"));},length);
   }
   function stopRecording(button) {
@@ -63,8 +67,8 @@
     recorder && recorder.exportWAV(function(blob) {
       url = URL.createObjectURL(blob);
     });
+    console.log(url);
     urls.push(url);
-    //console.log(urls);
 
     recorder.clear();
     clearInterval(interval);
@@ -87,8 +91,8 @@
     
     data = "<%= @Blank %>";
     blanks = JSON.parse(data.replace(/&quot;/g,'"'));
-    console.log(blanks);
-    
+    //console.log(blanks);
+
     newClip();
     document.getElementById('record').onclick = function () { startRecording(this); }
     
