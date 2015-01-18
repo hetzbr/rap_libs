@@ -5,6 +5,8 @@ Rails.application.routes.draw do
 
   get 'static_pages/play'
 
+  get '/transfer', to: 'static_pages#record'
+
  
 
   # The priority is based upon order of creation: first created -> highest priority.

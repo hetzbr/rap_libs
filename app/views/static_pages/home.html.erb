@@ -1,11 +1,44 @@
 <% provide(:title, "Home") %>
 <!DOCTYPE html>
-<html>
-    <body>
-    <h1>Rap Libs Home</h1>
-    <p>
-      This is the home page for the
-      Rap Libs application.
-    </p>
-  </body>
-</html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+
+<style type="text/css">
+.scroll-area {
+	height: 250px;
+	position: relative;
+	overflow: auto;
+}
+</style>
+    
+       
+</head>
+<body>
+<div class="container">
+    <h1>Welcome to Rap Libs!</h1>
+    <br>
+    <h2>Please choose a song below to get started.</h2>
+    <br>
+    <nav id="myNavbar" class="navbar navbar-default" role="navigation"> 
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+            
+            <p class="navbar-brand">Songs</p>
+        </div>
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="navbarCollapse">
+            
+        </div>
+    </nav>
+    <div class="scroll-area" data-spy="scroll" data-target="#myNavbar" data-offset="0">
+        <h3 id="section-1"><%= link_to "Bitches ain't Shit -Dr. Drey ft. Snoop Dogg", 'static_pages/record',{:song_id => 1, :name => "PluralNoun ain't Noun"} %> </h3>
+        
+        
+        
+    </div>
+</div>
+</body>
+</html>                                		                              		
