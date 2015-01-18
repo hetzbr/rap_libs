@@ -19,21 +19,18 @@
   var blanks;
   var index = -1;
   var interval;
+  var numBlanks;
   function __log(e, data) {
     log.innerHTML += "\n" + e + " " + (data || '');
   }
   function newClip() {
-    index += 1;
-    try {
+      index += 1;
       var line = document.getElementById('line');
       line.width = blanks[index].length;
       var wordtype = document.getElementById('wordtype');
       wordtype.innerHTML = blanks[index].wordtype ;
       var syllables = document.getElementById('syllables');
       syllables.innerHTML = blanks[index].syllabuls + " syllables";
-    } catch (e) {
-      console.log(urls);
-    }
   }
   var audio_context;
   var recorder;
@@ -62,18 +59,22 @@
     button.innerHTML = "Start";
     __log('Stopped recording.');
     
-    var url;
+    var url = '';
     // create WAV download link using audio data blob
     recorder && recorder.exportWAV(function(blob) {
       url = URL.createObjectURL(blob);
+      console.log(url);
+      urls.push(url);
     });
-    console.log(url);
-    urls.push(url);
 
     recorder.clear();
     clearInterval(interval);
-
-    newClip();
+    
+    if(index < numBlanks - 1) {
+      newClip();
+    } else {
+      interval = setInterval(function(){ end();},1000);
+    }
   }
   window.onload = function init() {
     try {
@@ -91,7 +92,7 @@
     
     data = "<%= @Blank %>";
     blanks = JSON.parse(data.replace(/&quot;/g,'"'));
-    //console.log(blanks);
+    numBlanks = blanks.length;
 
     newClip();
     document.getElementById('record').onclick = function () { startRecording(this); }
@@ -100,6 +101,41 @@
       __log('No live audio input: ' + e);
     });
   };
+  function end() {
+    clearInterval(interval);
+    console.log(urls);
+    for(var index = 0; index < urls.length; index += 1) {
+      console.log(typeof buffers[0]);
+      loadClipSound(index);
+    }
+  }
+  var buffers = [];
+  var intervals = [];
+  var songBuffer = null;
+  var context = new AudioContext();
+  function loadClipSound(index) {
+    var url = urls[index];
+    var request = new XMLHttpRequest();
+    request.open('GET', url, true);
+    request.responseType = 'arraybuffer';
+
+    // Decode asynchronously
+    request.onload = function() {
+      context.decodeAudioData(request.response, function(buffer) {
+        buffers[index] = buffer;
+        intervals[index] = setInterval(function(){ (playClip(index));},blanks[index].start_time + 1000);
+      });
+    }
+    request.send();
+  }
+  function playClip(index) {
+    var buffer = buffers[index];
+    clearInterval(intervals[index]);
+    var source = context.createBufferSource();
+    source.buffer = buffer;                
+    source.connect(context.destination);       
+    source.start(0);                         
+  }
   </script>
   </body>
 </html>
