@@ -16,7 +16,7 @@
     
        
 </head>
-<body>
+<body data-no-turbolink="true">
 <div class="container">
     <h1>Welcome to Rap Libs!</h1>
     <br>
@@ -34,8 +34,10 @@
         </div>
     </nav>
     <div class="scroll-area" data-spy="scroll" data-target="#myNavbar" data-offset="0">
-        <h3 id="section-1"><%= link_to "Bitches ain't Shit -Dr. Drey ft. Snoop Dogg", 'static_pages/record',{:song_id => 1, :name => "PluralNoun ain't Noun"} %> </h3>
-        
+        <h3 id="section-1">
+<a href="static_pages/record?Song_id=1">SONG1</a> </h3>
+        <h3 id="section-1">
+<a href="static_pages/record?Song_id=2">SONG2</a> </h3>
         
         
     </div>

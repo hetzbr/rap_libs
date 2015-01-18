@@ -3,7 +3,7 @@ class StaticPagesController < ApplicationController
   end
 
   def record
-  	@Blank = Blank.where(:Song_id => 1).to_json
+  	@Blank = Blank.where(:Song_id => params[:Song_id]).to_json
   end
 
   def play

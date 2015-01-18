@@ -1,28 +1,28 @@
 <% provide(:title, "Record") %>
 <!DOCTYPE html>
 <html>
+
     <body>
 
-<h1>Recorder.js simple WAV export example</h1>
+
 
  <div style="margin: auto;">
-  <button id="record">Start</button>
+  <div class ="center">
+  <button id="record"  class="btn">Start</button>
   <div id='line'>|</div>
-  <div id='wordtype'></div>
-  <div id='syllables'></div>
+  
+  <div id='wordtype' class = "biggertext"></div>
+  <div id='syllables' class= "biggertext"></div>
+
+</div>
  
-  <h2>Log</h2>
-  <pre id="log"></pre>
- </div>
+
 
   <script>
   var blanks;
   var index = -1;
   var interval;
   var numBlanks;
-  function __log(e, data) {
-    log.innerHTML += "\n" + e + " " + (data || '');
-  }
   function newClip() {
       index += 1;
       var line = document.getElementById('line');
@@ -37,19 +37,13 @@
   var urls = [];
   function startUserMedia(stream) {
     var input = audio_context.createMediaStreamSource(stream);
-    __log('Media stream created.');
-    // Uncomment if you want the audio to feedback directly
-    //input.connect(audio_context.destination);
-    //__log('Input connected to audio context destination.');
     
     recorder = new Recorder(input);
-    __log('Recorder initialised.');
   }
   function startRecording(button) {
     recorder && recorder.record();
     button.onclick = function() { stopRecording(this); }
     button.innerHTML = "Stop";
-    __log('Recording...');
     var length = blanks[index].length;
     interval = setInterval(function(){stopRecording(document.getElementById("record"));},length);
   }
@@ -57,7 +51,6 @@
     recorder && recorder.stop();
     button.onclick = function () { startRecording(this); }
     button.innerHTML = "Start";
-    __log('Stopped recording.');
     
     var url = '';
     // create WAV download link using audio data blob
@@ -66,7 +59,7 @@
       console.log(url);
       urls.push(url);
     });
-
+    console.log(recorder);
     recorder.clear();
     clearInterval(interval);
     
@@ -77,6 +70,7 @@
     }
   }
   window.onload = function init() {
+  //function begin() {
     try {
       // webkit shim
       window.AudioContext = window.AudioContext || window.webkitAudioContext;
@@ -84,8 +78,6 @@
       window.URL = window.URL || window.webkitURL;
       
       audio_context = new AudioContext;
-      __log('Audio context set up.');
-      __log('navigator.getUserMedia ' + (navigator.getUserMedia ? 'available.' : 'not present!'));
     } catch (e) {
       alert('No web audio support in this browser!');
     }
@@ -93,19 +85,19 @@
     data = "<%= @Blank %>";
     blanks = JSON.parse(data.replace(/&quot;/g,'"'));
     numBlanks = blanks.length;
+    console.log(blanks);
 
     newClip();
     document.getElementById('record').onclick = function () { startRecording(this); }
     
     navigator.getUserMedia({audio: true}, startUserMedia, function(e) {
-      __log('No live audio input: ' + e);
     });
   };
   function end() {
     clearInterval(interval);
     console.log(urls);
+    loadSong();
     for(var index = 0; index < urls.length; index += 1) {
-      console.log(typeof buffers[0]);
       loadClipSound(index);
     }
   }
@@ -123,13 +115,34 @@
     request.onload = function() {
       context.decodeAudioData(request.response, function(buffer) {
         buffers[index] = buffer;
-        intervals[index] = setInterval(function(){ (playClip(index));},blanks[index].start_time + 1000);
+        intervals[index] = setInterval(function(){ (playClip(index));},blanks[index].start_time + 1);
       });
     }
     request.send();
   }
   function playClip(index) {
     var buffer = buffers[index];
+    clearInterval(intervals[index]);
+    var source = context.createBufferSource();
+    source.buffer = buffer;                
+    source.connect(context.destination);       
+    source.start(0);                         
+  }
+  function loadSong() {
+    var url = "../assets/Club.wav";
+    var request = new XMLHttpRequest();
+    request.open('GET', url, true);
+    request.responseType = 'arraybuffer';
+
+    // Decode asynchronously
+    request.onload = function() {
+      context.decodeAudioData(request.response, function(buffer) {
+        playSong(buffer);
+      });
+    }
+    request.send();
+  }
+  function playSong(buffer) {
     clearInterval(intervals[index]);
     var source = context.createBufferSource();
     source.buffer = buffer;                
