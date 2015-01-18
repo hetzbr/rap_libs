@@ -1,3 +1,3 @@
 class Song < ActiveRecord::Base
-has_many :Blanks, :dependent => :destroy
+has_many :Blank, :dependent => :destroy
 end
