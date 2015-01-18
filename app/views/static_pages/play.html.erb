@@ -4,10 +4,18 @@
 <html>
   
   <body>
-    <h1>Rap Libs Play</h1>
-    <p>
-      This is the play page for the
-      Rap Libs application.
-    </p>
-  </body>
+  
+  <h1>Listen to your song!</h1>
+
+  <audio id='song'>
+
+  <script>
+  window.onload = function init() {
+    var au = document.findElementById('song');
+    au.controls = true;
+    au.src = 'url';
+  };
+  </script>
+  
+</body>
 </html>
