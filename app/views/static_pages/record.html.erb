@@ -16,7 +16,7 @@
  </div>
 
   <script>
-  //var blanks = /**/;
+  var blanks;
   var index = 0;
   var interval;
   function __log(e, data) {
@@ -64,7 +64,7 @@
       url = URL.createObjectURL(blob);
     });
     urls.push(url);
-    console.log(urls);
+    //console.log(urls);
 
     recorder.clear();
     clearInterval(interval);
@@ -84,6 +84,10 @@
     } catch (e) {
       alert('No web audio support in this browser!');
     }
+    
+    data = "<%= @Blank %>";
+    blanks = JSON.parse(data.replace(/&quot;/g,'"'));
+    console.log(blanks);
     
     newClip();
     document.getElementById('record').onclick = function () { startRecording(this); }
